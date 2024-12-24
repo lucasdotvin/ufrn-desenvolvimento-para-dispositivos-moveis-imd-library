@@ -6,15 +6,16 @@ import vin.lucas.imdlibrary.contracts.repositories.UserRepository
 import vin.lucas.imdlibrary.contracts.services.UserService
 import vin.lucas.imdlibrary.contracts.dependencies.ServiceContainer
 import vin.lucas.imdlibrary.contracts.repositories.HashRepository
+import vin.lucas.imdlibrary.contracts.validation.CpfValidator
 import vin.lucas.imdlibrary.repositories.BcryptHashRepository
 import vin.lucas.imdlibrary.repositories.SqliteUserRepository
 import vin.lucas.imdlibrary.services.DefaultUserService
+import vin.lucas.imdlibrary.validation.DefaultCpfValidator
 
 class DefaultServiceContainer(context: Context) : ServiceContainer {
-    override val hashRepository: HashRepository by lazy {
-        BcryptHashRepository()
-    }
+    override val cpfValidator: CpfValidator = DefaultCpfValidator()
 
+    override val hashRepository: HashRepository = BcryptHashRepository()
     override val userRepository: UserRepository by lazy {
         SqliteUserRepository(
             context,
@@ -24,6 +25,7 @@ class DefaultServiceContainer(context: Context) : ServiceContainer {
 
     override val userService: UserService by lazy {
         DefaultUserService(
+            cpfValidator,
             hashRepository,
             userRepository,
         )
