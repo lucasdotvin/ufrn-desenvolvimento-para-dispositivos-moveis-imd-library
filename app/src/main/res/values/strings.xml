@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">IMD Library</string>
+    <string name="sqlite_database_name">imdlibrary.sqlite</string>
+</resources>
