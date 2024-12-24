@@ -10,4 +10,5 @@
     <string name="sign_up_content_description">Criar Conta</string>
 
     <string name="sqlite_database_name">imdlibrary.sqlite</string>
+    <string name="auth_shared_preferences_until_key">until</string>
 </resources>
