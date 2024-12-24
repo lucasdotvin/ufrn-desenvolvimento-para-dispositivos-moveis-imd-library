@@ -24,6 +24,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.activities.auth.SignInActivity"
+            android:exported="false"
+            android:label="@string/sign_in_content_description"
+            android:theme="@style/Theme.IMDLibrary"/>
+
+        <activity
+            android:name=".ui.activities.auth.SignUpActivity"
+            android:exported="false"
+            android:label="@string/sign_up_content_description"
+            android:theme="@style/Theme.IMDLibrary"/>
+
+        <activity
+            android:name=".ui.activities.auth.ForgotActivity"
+            android:exported="false"
+            android:label="@string/forgot_content_description"
+            android:theme="@style/Theme.IMDLibrary"/>
     </application>
 
 </manifest>
