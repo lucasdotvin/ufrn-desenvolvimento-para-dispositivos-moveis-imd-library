@@ -63,4 +63,33 @@ class DefaultUserService(
 
         return user
     }
+
+    override fun resetPassword(username: String, plainCpf: String, plainNewPassword: String) {
+        require(username.isNotBlank()) {
+            "Nome de usuário não pode ser vazio"
+        }
+
+        require(plainCpf.isNotBlank()) {
+            "CPF não pode ser vazio"
+        }
+
+        require(plainNewPassword.isNotBlank()) {
+            "Nova senha não pode ser vazia"
+        }
+
+        val user = userRepository.findByUsername(username)
+
+        requireNotNull(user) {
+            "Usuário não encontrado"
+        }
+
+        require(hashRepository.verify(plainCpf, user.cpf)) {
+            "CPF incorreto"
+        }
+
+        val hashedNewPassword = hashRepository.hash(plainNewPassword)
+        user.password = hashedNewPassword
+
+        userRepository.update(user)
+    }
 }

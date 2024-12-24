@@ -6,4 +6,6 @@ interface UserService {
     fun signUp(username: String, cpf: String, plainPassword: String): User
 
     fun signIn(username: String, plainPassword: String): User
+
+    fun resetPassword(username: String, plainCpf: String, plainNewPassword: String)
 }
