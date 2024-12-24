@@ -7,7 +7,7 @@ interface UserRepository {
 
     fun findByUsername(username: String): User?
 
-    fun store(username: String, password: String): User
+    fun store(username: String, cpf: String, password: String): User
 
     fun update(user: User)
 }

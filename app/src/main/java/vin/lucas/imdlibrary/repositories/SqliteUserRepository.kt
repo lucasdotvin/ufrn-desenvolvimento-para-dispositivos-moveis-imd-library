@@ -16,6 +16,7 @@ class SqliteUserRepository(
 
         private const val ID_COLUMN = "id"
         private const val USERNAME_COLUMN = "username"
+        private const val CPF_COLUMN = "cpf"
         private const val PASSWORD_COLUMN = "password"
         private const val CREATED_AT_COLUMN = "created_at"
         private const val UPDATED_AT_COLUMN = "updated_at"
@@ -26,6 +27,7 @@ class SqliteUserRepository(
             CREATE TABLE IF NOT EXISTS $TABLE (
                 $ID_COLUMN INTEGER PRIMARY KEY AUTOINCREMENT,
                 $USERNAME_COLUMN TEXT UNIQUE NOT NULL,
+                $CPF_COLUMN TEXT NOT NULL,
                 $PASSWORD_COLUMN TEXT NOT NULL,
                 $CREATED_AT_COLUMN TIMESTAMP NOT NULL,
                 $UPDATED_AT_COLUMN TIMESTAMP NOT NULL
@@ -39,19 +41,19 @@ class SqliteUserRepository(
         """
 
         private const val SQL_FIND_BY_USERNAME = """
-            SELECT $ID_COLUMN, $USERNAME_COLUMN, $PASSWORD_COLUMN, $CREATED_AT_COLUMN, $UPDATED_AT_COLUMN
+            SELECT *
             FROM $TABLE
             WHERE $USERNAME_COLUMN = ?;
         """
 
         private const val SQL_INSERT = """
-            INSERT INTO $TABLE ($USERNAME_COLUMN, $PASSWORD_COLUMN, $CREATED_AT_COLUMN, $UPDATED_AT_COLUMN)
-            VALUES (?, ?, ?, ?);
+            INSERT INTO $TABLE ($USERNAME_COLUMN, $CPF_COLUMN, $PASSWORD_COLUMN, $CREATED_AT_COLUMN, $UPDATED_AT_COLUMN)
+            VALUES (?, ?, ?, ?, ?);
         """
 
         private const val SQL_UPDATE = """
             UPDATE $TABLE
-            SET $USERNAME_COLUMN = ?, $PASSWORD_COLUMN = ?, $UPDATED_AT_COLUMN = ?
+            SET $USERNAME_COLUMN = ?, $CPF_COLUMN = ?, $PASSWORD_COLUMN = ?, $UPDATED_AT_COLUMN = ?
             WHERE $ID_COLUMN = ?;
         """
     }
@@ -85,9 +87,10 @@ class SqliteUserRepository(
         }
 
         val id = cursor.getInt(0)
-        val password = cursor.getString(2)
-        val createdAt = cursor.getLong(3)
-        val updatedAt = cursor.getLong(4)
+        val cpf = cursor.getString(2)
+        val password = cursor.getString(3)
+        val createdAt = cursor.getLong(4)
+        val updatedAt = cursor.getLong(5)
 
         cursor.close()
         readableDatabase.close()
@@ -95,16 +98,20 @@ class SqliteUserRepository(
         return User(
             id,
             username,
+            cpf,
             password,
             Date(createdAt),
             Date(updatedAt),
         )
     }
 
-    override fun store(username: String, password: String): User {
+    override fun store(username: String, cpf: String, password: String): User {
         val now = System.currentTimeMillis()
 
-        writableDatabase.execSQL(SQL_INSERT, arrayOf(username, password, now, now))
+        writableDatabase.execSQL(
+            SQL_INSERT,
+            arrayOf(username, cpf, password, now, now),
+        )
 
         val cursor = writableDatabase.rawQuery("SELECT last_insert_rowid()", null)
         cursor.moveToFirst()
@@ -117,6 +124,7 @@ class SqliteUserRepository(
         return User(
             id,
             username,
+            cpf,
             password,
             Date(now),
             Date(now),
