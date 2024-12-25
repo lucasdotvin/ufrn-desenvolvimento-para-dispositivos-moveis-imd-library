@@ -9,7 +9,7 @@ class DefaultSignInUseCase(
     private val sessionService: SessionService,
     private val userService: UserService,
 ) : SignInUseCase {
-    override fun execute(username: String, plainPassword: String): User {
+    override fun execute(username: String, plainPassword: String) {
         require(username.isNotBlank()) {
             "Nome de usuário não pode ser vazio"
         }
@@ -20,7 +20,5 @@ class DefaultSignInUseCase(
 
         val user = userService.signIn(username, plainPassword)
         sessionService.store(user)
-
-        return user
     }
 }

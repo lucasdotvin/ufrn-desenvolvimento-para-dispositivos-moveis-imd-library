@@ -5,7 +5,7 @@ import vin.lucas.imdlibrary.contracts.dependencies.ServiceContainer
 import vin.lucas.imdlibrary.dependencies.DefaultServiceContainer
 
 class IMDLibraryApplication : Application() {
-    val container: ServiceContainer by lazy {
+    val serviceContainer: ServiceContainer by lazy {
         DefaultServiceContainer(this)
     }
 }

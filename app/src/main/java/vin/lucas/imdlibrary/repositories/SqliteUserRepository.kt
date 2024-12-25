@@ -75,7 +75,7 @@ class SqliteUserRepository(
 
     override fun existsByUsername(username: String): Boolean {
         val cursor = readableDatabase.rawQuery(SQL_EXISTS_BY_USERNAME, arrayOf(username))
-        val count = cursor.getInt(0)
+        val count = cursor.moveToFirst().let { cursor.getInt(0) }
 
         cursor.close()
         readableDatabase.close()

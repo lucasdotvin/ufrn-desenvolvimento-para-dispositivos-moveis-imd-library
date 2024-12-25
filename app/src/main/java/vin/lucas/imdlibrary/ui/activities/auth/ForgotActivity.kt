@@ -1,7 +1,9 @@
 package vin.lucas.imdlibrary.ui.activities.auth
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
@@ -32,11 +35,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import vin.lucas.imdlibrary.IMDLibraryApplication
 import vin.lucas.imdlibrary.R
+import vin.lucas.imdlibrary.contracts.cases.ResetPasswordUseCase
+import vin.lucas.imdlibrary.ui.activities.GuestActivity
+import vin.lucas.imdlibrary.ui.input.transformation.CpfVisualTransformation
 import vin.lucas.imdlibrary.ui.theme.IMDLibraryTheme
 
-class ForgotActivity : ComponentActivity() {
+class ForgotActivity : GuestActivity() {
+    private val resetPasswordUseCase: ResetPasswordUseCase by lazy {
+        (application as IMDLibraryApplication).serviceContainer.resetPasswordUseCase
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +71,7 @@ class ForgotActivity : ComponentActivity() {
                                 }
                             },
                             title = {
-                                Text("Recuperar Acesso")
+                                Text("Redefinir Senha")
                             },
                         )
                     },
@@ -68,9 +81,16 @@ class ForgotActivity : ComponentActivity() {
                         )
                         {
                             ForgotForm(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(24.dp),
+                                modifier = Modifier.fillMaxSize().padding(24.dp),
+                                onSubmit = { username, cpf, password ->
+                                    tryResetPassword(
+                                        this,
+                                        username,
+                                        cpf,
+                                        password,
+                                        resetPasswordUseCase,
+                                    )
+                                },
                             )
                         }
                     }
@@ -81,8 +101,13 @@ class ForgotActivity : ComponentActivity() {
 }
 
 @Composable
-fun ForgotForm(modifier: Modifier = Modifier) {
-    var document by remember { mutableStateOf("") }
+fun ForgotForm(
+    modifier: Modifier = Modifier,
+    onSubmit: (username: String, cpf: String, password: String) -> Unit,
+) {
+    var username by remember { mutableStateOf("") }
+    var cpf by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier,
@@ -91,14 +116,34 @@ fun ForgotForm(modifier: Modifier = Modifier) {
     ) {
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = document,
-            onValueChange = { document = it },
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Usuário") },
+        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = cpf,
+            onValueChange = { it ->
+                cpf = it.filter { it.isDigit() }.take(11)
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            visualTransformation = CpfVisualTransformation(),
             label = { Text("CPF") },
+        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = password,
+            onValueChange = { password = it },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            label = { Text("Nova Senha") },
         )
         Spacer(modifier = Modifier.padding(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {},
+            onClick = { onSubmit(username, cpf, password) },
         ) {
             Icon(
                 imageVector = Icons.Filled.ArrowForward,
@@ -107,7 +152,26 @@ fun ForgotForm(modifier: Modifier = Modifier) {
                     .padding(end = 4.dp)
                     .size(20.dp),
             )
-            Text(text = "Recuperar")
+            Text(text = "Redefinir")
         }
     }
+}
+
+fun tryResetPassword(
+    context: Activity,
+    username: String,
+    cpf: String,
+    password: String,
+    resetPasswordUseCase: ResetPasswordUseCase,
+) {
+    try {
+        resetPasswordUseCase.execute(username, cpf, password)
+    } catch (e: IllegalArgumentException) {
+        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+        return
+    }
+
+    Toast.makeText(context, "Senha redefinida com sucesso!", Toast.LENGTH_SHORT).show()
+    context.startActivity(Intent(context, SignInActivity::class.java))
+    context.finish()
 }

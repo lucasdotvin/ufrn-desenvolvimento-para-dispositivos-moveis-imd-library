@@ -17,7 +17,7 @@ class SharedPreferencesSessionRepository(private val context: Context) : Session
 
     override fun clear() {
         with(sharedPreferences.edit()) {
-            remove(context.getString(R.string.auth_shared_preferences_username_key))
+            remove(context.getString(R.string.auth_shared_preferences_user_identifier_key))
             remove(context.getString(R.string.auth_shared_preferences_until_key))
             apply()
         }
@@ -26,7 +26,7 @@ class SharedPreferencesSessionRepository(private val context: Context) : Session
     override fun store(user: User, durationInSeconds: Long?) {
         with(sharedPreferences.edit()) {
             putString(
-                context.getString(R.string.auth_shared_preferences_username_key),
+                context.getString(R.string.auth_shared_preferences_user_identifier_key),
                 user.id.toString(),
             )
 
@@ -43,7 +43,7 @@ class SharedPreferencesSessionRepository(private val context: Context) : Session
 
     override fun retrieve(): UserKey? {
         val storedKey = sharedPreferences.getString(
-            context.getString(R.string.auth_shared_preferences_username_key),
+            context.getString(R.string.auth_shared_preferences_user_identifier_key),
             null,
         )?.toInt() ?: return null
 

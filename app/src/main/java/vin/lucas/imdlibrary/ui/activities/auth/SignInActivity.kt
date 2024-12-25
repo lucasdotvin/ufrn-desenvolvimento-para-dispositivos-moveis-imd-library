@@ -1,6 +1,6 @@
 package vin.lucas.imdlibrary.ui.activities.auth
 
-import android.content.Context.MODE_PRIVATE
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -8,11 +8,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -37,30 +39,28 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import vin.lucas.imdlibrary.IMDLibraryApplication
 import vin.lucas.imdlibrary.R
+import vin.lucas.imdlibrary.contracts.cases.SignInUseCase
+import vin.lucas.imdlibrary.ui.activities.GuestActivity
 import vin.lucas.imdlibrary.ui.activities.MainActivity
 import vin.lucas.imdlibrary.ui.theme.IMDLibraryTheme
 
-class SignInActivity : ComponentActivity() {
+class SignInActivity : GuestActivity() {
+    private val signInUseCase: SignInUseCase by lazy {
+        (application as IMDLibraryApplication).serviceContainer.signInUseCase
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val sharedPref = getSharedPreferences(
-            getString(R.string.auth_shared_preferences_key),
-            MODE_PRIVATE
-        )
-
-        if (sharedPref.contains(getString(R.string.auth_shared_preferences_username_key))) {
-            Toast.makeText(this, "Você já está logado", Toast.LENGTH_SHORT).show()
-
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
 
         setContent {
             IMDLibraryTheme {
@@ -86,6 +86,14 @@ class SignInActivity : ComponentActivity() {
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(24.dp),
+                                onSubmit = { username, password ->
+                                    trySignIn(
+                                        this,
+                                        username,
+                                        password,
+                                        signInUseCase,
+                                    )
+                                },
                             )
                         }
                     }
@@ -98,7 +106,8 @@ class SignInActivity : ComponentActivity() {
 @Composable
 fun SignInForm(
     context: ComponentActivity,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSubmit: (username: String, password: String) -> Unit,
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -122,30 +131,25 @@ fun SignInForm(
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             label = { Text("Senha") },
+            supportingText = {
+                ClickableText(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = AnnotatedString("Esqueceu sua senha?"),
+                    style = TextStyle(
+                        textAlign = TextAlign.End,
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline,
+                    ),
+                    onClick = {
+                        context.startActivity(Intent(context, ForgotActivity::class.java))
+                    }
+                )
+            }
         )
-        TextButton(
-            onClick = {
-                context.startActivity(Intent(context, ForgotActivity::class.java))
-            },
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Warning,
-                contentDescription = stringResource(id = R.string.forgot_content_description),
-                modifier = Modifier
-                    .padding(end = 4.dp)
-                    .size(16.dp),
-            )
-            Text(
-                text = "Esqueceu sua senha ou login?",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.primary,
-                textDecoration = TextDecoration.Underline,
-            )
-        }
         Spacer(modifier = Modifier.padding(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { authenticate(username, password, context) },
+            onClick = { onSubmit(username, password) },
         ) {
             Icon(
                 imageVector = Icons.Filled.ExitToApp,
@@ -179,18 +183,20 @@ fun SignInForm(
     }
 }
 
-fun authenticate(username: String, password: String, context: ComponentActivity) {
-    val sharedPreferences = context.getSharedPreferences(
-        context.getString(R.string.auth_shared_preferences_key),
-        MODE_PRIVATE,
-    )
-
-    with(sharedPreferences.edit()) {
-        putString(context.getString(R.string.auth_shared_preferences_username_key), username)
-        apply()
+fun trySignIn(
+    context: Activity,
+    username: String,
+    password: String,
+    signInUseCase: SignInUseCase,
+) {
+    try {
+        signInUseCase.execute(username, password)
+    } catch (e: IllegalArgumentException) {
+        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+        return
     }
 
-    Toast.makeText(context, "Autenticado com sucesso!", Toast.LENGTH_SHORT).show()
-
+    Toast.makeText(context, "Que bom te ver de novo, $username!", Toast.LENGTH_SHORT).show()
     context.startActivity(Intent(context, MainActivity::class.java))
+    context.finish()
 }
