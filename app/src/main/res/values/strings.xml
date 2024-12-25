@@ -5,6 +5,7 @@
     <string name="auth_shared_preferences_until_key">until</string>
     <string name="auth_shared_preferences_user_identifier_key">user_identifier</string>
 
+    <string name="add_content_description">Adicionar</string>
     <string name="back_content_description">Voltar</string>
     <string name="forgot_content_description">Redefinir Senha</string>
     <string name="sign_in_content_description">Entrar</string>

@@ -1,11 +1,12 @@
 package vin.lucas.imdlibrary.repositories
 
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.core.content.contentValuesOf
 import vin.lucas.imdlibrary.contracts.repositories.UserRepository
 import vin.lucas.imdlibrary.entities.User
-import vin.lucas.imdlibrary.entities.UserKey
 import java.util.Date
 
 class SqliteUserRepository(
@@ -47,17 +48,6 @@ class SqliteUserRepository(
             WHERE $USERNAME_COLUMN = ?;
         """
 
-        private const val SQL_INSERT = """
-            INSERT INTO $TABLE ($USERNAME_COLUMN, $CPF_COLUMN, $PASSWORD_COLUMN, $CREATED_AT_COLUMN, $UPDATED_AT_COLUMN)
-            VALUES (?, ?, ?, ?, ?);
-        """
-
-        private const val SQL_UPDATE = """
-            UPDATE $TABLE
-            SET $USERNAME_COLUMN = ?, $CPF_COLUMN = ?, $PASSWORD_COLUMN = ?, $UPDATED_AT_COLUMN = ?
-            WHERE $ID_COLUMN = ?;
-        """
-
         private const val SQL_FIND_BY_ID = """
             SELECT *
             FROM $TABLE
@@ -93,39 +83,47 @@ class SqliteUserRepository(
             return null
         }
 
-        val id = cursor.getInt(0)
-        val cpf = cursor.getString(2)
-        val password = cursor.getString(3)
-        val createdAt = cursor.getLong(4)
-        val updatedAt = cursor.getLong(5)
+        val user = cursorToUser(cursor)
 
         cursor.close()
         readableDatabase.close()
 
-        return User(
-            id,
-            username,
-            cpf,
-            password,
-            Date(createdAt),
-            Date(updatedAt),
-        )
+        return user
+    }
+
+    override fun findById(id: Long): User? {
+        val cursor = readableDatabase.rawQuery(SQL_FIND_BY_ID, arrayOf(id.toString()))
+
+        if (!cursor.moveToFirst()) {
+            cursor.close()
+            readableDatabase.close()
+
+            return null
+        }
+
+        val user = cursorToUser(cursor)
+
+        cursor.close()
+        readableDatabase.close()
+
+        return user
     }
 
     override fun store(username: String, cpf: String, password: String): User {
         val now = System.currentTimeMillis()
 
-        writableDatabase.execSQL(
-            SQL_INSERT,
-            arrayOf(username, cpf, password, now, now),
+        val id = writableDatabase.insert(
+            TABLE,
+            null,
+            contentValuesOf(
+                USERNAME_COLUMN to username,
+                CPF_COLUMN to cpf,
+                PASSWORD_COLUMN to password,
+                CREATED_AT_COLUMN to now,
+                UPDATED_AT_COLUMN to now,
+            ),
         )
 
-        val cursor = writableDatabase.rawQuery("SELECT last_insert_rowid()", null)
-        cursor.moveToFirst()
-
-        val id = cursor.getInt(0)
-
-        cursor.close()
         writableDatabase.close()
 
         return User(
@@ -141,39 +139,31 @@ class SqliteUserRepository(
     override fun update(user: User) {
         val now = System.currentTimeMillis()
 
-        writableDatabase.execSQL(SQL_UPDATE, arrayOf(user.username, user.password, now, user.id))
+        writableDatabase.update(
+            TABLE,
+            contentValuesOf(
+                USERNAME_COLUMN to user.username,
+                CPF_COLUMN to user.cpf,
+                PASSWORD_COLUMN to user.password,
+                UPDATED_AT_COLUMN to now,
+            ),
+            "$ID_COLUMN = ?",
+            arrayOf(user.id.toString()),
+        )
 
         writableDatabase.close()
 
         user.updatedAt = Date(now)
     }
 
-    override fun findByKey(key: UserKey): User? {
-        val cursor = readableDatabase.rawQuery(SQL_FIND_BY_ID, arrayOf(key.toString()))
-
-        if (!cursor.moveToFirst()) {
-            cursor.close()
-            readableDatabase.close()
-
-            return null
-        }
-
-        val username = cursor.getString(1)
-        val cpf = cursor.getString(2)
-        val password = cursor.getString(3)
-        val createdAt = cursor.getLong(4)
-        val updatedAt = cursor.getLong(5)
-
-        cursor.close()
-        readableDatabase.close()
-
+    private fun cursorToUser(cursor: Cursor): User {
         return User(
-            key,
-            username,
-            cpf,
-            password,
-            Date(createdAt),
-            Date(updatedAt),
+            cursor.getLong(0),
+            cursor.getString(1),
+            cursor.getString(2),
+            cursor.getString(3),
+            Date(cursor.getLong(4)),
+            Date(cursor.getLong(5)),
         )
     }
 }

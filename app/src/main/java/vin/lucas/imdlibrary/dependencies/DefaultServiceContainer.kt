@@ -11,12 +11,14 @@ import vin.lucas.imdlibrary.contracts.cases.SignUpUseCase
 import vin.lucas.imdlibrary.contracts.repositories.UserRepository
 import vin.lucas.imdlibrary.contracts.services.UserService
 import vin.lucas.imdlibrary.contracts.dependencies.ServiceContainer
+import vin.lucas.imdlibrary.contracts.repositories.BookRepository
 import vin.lucas.imdlibrary.contracts.repositories.HashRepository
 import vin.lucas.imdlibrary.contracts.repositories.SessionRepository
 import vin.lucas.imdlibrary.contracts.services.SessionService
 import vin.lucas.imdlibrary.contracts.validation.CpfValidator
 import vin.lucas.imdlibrary.repositories.BcryptHashRepository
 import vin.lucas.imdlibrary.repositories.SharedPreferencesSessionRepository
+import vin.lucas.imdlibrary.repositories.SqliteBookRepository
 import vin.lucas.imdlibrary.repositories.SqliteUserRepository
 import vin.lucas.imdlibrary.services.DefaultSessionService
 import vin.lucas.imdlibrary.services.DefaultUserService
@@ -24,6 +26,13 @@ import vin.lucas.imdlibrary.validation.DefaultCpfValidator
 
 class DefaultServiceContainer(context: Context) : ServiceContainer {
     override val cpfValidator: CpfValidator = DefaultCpfValidator()
+
+    override val bookRepository: BookRepository by lazy {
+        SqliteBookRepository(
+            context,
+            context.getString(R.string.sqlite_database_name),
+        )
+    }
 
     override val hashRepository: HashRepository = BcryptHashRepository()
     override val sessionRepository: SessionRepository by lazy {

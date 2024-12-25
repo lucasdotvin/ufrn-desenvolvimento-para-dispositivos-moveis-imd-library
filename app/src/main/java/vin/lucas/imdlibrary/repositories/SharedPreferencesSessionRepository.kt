@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import vin.lucas.imdlibrary.R
 import vin.lucas.imdlibrary.contracts.repositories.SessionRepository
 import vin.lucas.imdlibrary.entities.User
-import vin.lucas.imdlibrary.entities.UserKey
 
 class SharedPreferencesSessionRepository(private val context: Context) : SessionRepository {
     private val sharedPreferences: SharedPreferences by lazy {
@@ -41,11 +40,11 @@ class SharedPreferencesSessionRepository(private val context: Context) : Session
         }
     }
 
-    override fun retrieve(): UserKey? {
+    override fun retrieve(): Long? {
         val storedKey = sharedPreferences.getString(
             context.getString(R.string.auth_shared_preferences_user_identifier_key),
             null,
-        )?.toInt() ?: return null
+        )?.toLong() ?: return null
 
         val until = sharedPreferences.getLong(
             context.getString(R.string.auth_shared_preferences_until_key),

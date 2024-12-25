@@ -29,8 +29,8 @@ class DefaultSessionService(
     }
 
     private fun loadSessionUser() {
-        val userKey = sessionRepository.retrieve()
-        val sessionUser = userKey?.let { userRepository.findByKey(it) }
+        val Long = sessionRepository.retrieve()
+        val sessionUser = Long?.let { userRepository.findById(it) }
         sessionUser?.let { store(it) }
     }
 }

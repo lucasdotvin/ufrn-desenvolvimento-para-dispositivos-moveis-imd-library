@@ -2,10 +2,8 @@ package vin.lucas.imdlibrary.entities
 
 import java.util.Date
 
-typealias UserKey = Int
-
 data class User(
-    val id: UserKey,
+    val id: Long,
     var username: String,
     var cpf: String,
     var password: String,
