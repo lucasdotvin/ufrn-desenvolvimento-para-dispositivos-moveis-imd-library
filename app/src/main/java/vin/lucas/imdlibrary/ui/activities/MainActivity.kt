@@ -1,5 +1,6 @@
 package vin.lucas.imdlibrary.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import vin.lucas.imdlibrary.R
+import vin.lucas.imdlibrary.ui.activities.books.CreateBookActivity
 import vin.lucas.imdlibrary.ui.theme.IMDLibraryTheme
 
 class MainActivity : AuthenticatedActivity() {
@@ -40,7 +42,9 @@ class MainActivity : AuthenticatedActivity() {
                         )
                     },
                     floatingActionButton = {
-                        FloatingActionButton(onClick = {}) {
+                        FloatingActionButton(onClick = {
+                            startActivity(Intent(this, CreateBookActivity::class.java))
+                        }) {
                             Icon(
                                 Icons.Filled.Add,
                                 stringResource(R.string.add_content_description)

@@ -1,7 +1,7 @@
 package vin.lucas.imdlibrary.contracts.repositories
 
 import vin.lucas.imdlibrary.entities.Book
-import vin.lucas.imdlibrary.values.BookStoringPayload
+import vin.lucas.imdlibrary.values.BookChangePayload
 
 interface BookRepository {
     fun existsByIsbn(isbn: String): Boolean
@@ -10,7 +10,7 @@ interface BookRepository {
 
     fun findById(id: Long): Book?
 
-    fun store(payload: BookStoringPayload): Book
+    fun store(payload: BookChangePayload): Book
 
     fun update(book: Book): Boolean
 

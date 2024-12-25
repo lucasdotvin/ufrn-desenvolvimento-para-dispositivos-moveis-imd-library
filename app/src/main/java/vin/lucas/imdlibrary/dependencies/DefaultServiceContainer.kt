@@ -10,19 +10,20 @@ import vin.lucas.imdlibrary.contracts.cases.auth.ResetPasswordUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignInUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignUpUseCase
 import vin.lucas.imdlibrary.contracts.cases.books.CreateBookUseCase
-import vin.lucas.imdlibrary.contracts.repositories.UserRepository
-import vin.lucas.imdlibrary.contracts.services.UserService
 import vin.lucas.imdlibrary.contracts.dependencies.ServiceContainer
 import vin.lucas.imdlibrary.contracts.repositories.BookRepository
 import vin.lucas.imdlibrary.contracts.repositories.HashRepository
 import vin.lucas.imdlibrary.contracts.repositories.SessionRepository
+import vin.lucas.imdlibrary.contracts.repositories.UserRepository
 import vin.lucas.imdlibrary.contracts.services.BookService
 import vin.lucas.imdlibrary.contracts.services.SessionService
+import vin.lucas.imdlibrary.contracts.services.UserService
 import vin.lucas.imdlibrary.contracts.validation.CpfValidator
 import vin.lucas.imdlibrary.repositories.BcryptHashRepository
 import vin.lucas.imdlibrary.repositories.SharedPreferencesSessionRepository
-import vin.lucas.imdlibrary.repositories.SqliteBookRepository
-import vin.lucas.imdlibrary.repositories.SqliteUserRepository
+import vin.lucas.imdlibrary.repositories.sqlite.SqliteBookRepository
+import vin.lucas.imdlibrary.repositories.sqlite.SqliteDriver
+import vin.lucas.imdlibrary.repositories.sqlite.SqliteUserRepository
 import vin.lucas.imdlibrary.services.DefaultBookService
 import vin.lucas.imdlibrary.services.DefaultSessionService
 import vin.lucas.imdlibrary.services.DefaultUserService
@@ -33,11 +34,15 @@ class DefaultServiceContainer(context: Context) : ServiceContainer {
     override val cpfValidator: CpfValidator = DefaultCpfValidator()
 
     /** Repositories */
-    override val bookRepository: BookRepository by lazy {
-        SqliteBookRepository(
+    private val sqliteDriver: SqliteDriver by lazy {
+        SqliteDriver(
             context,
             context.getString(R.string.sqlite_database_name),
         )
+    }
+
+    override val bookRepository: BookRepository by lazy {
+        SqliteBookRepository(sqliteDriver)
     }
 
     override val hashRepository: HashRepository = BcryptHashRepository()
@@ -46,10 +51,7 @@ class DefaultServiceContainer(context: Context) : ServiceContainer {
     }
 
     override val userRepository: UserRepository by lazy {
-        SqliteUserRepository(
-            context,
-            context.getString(R.string.sqlite_database_name),
-        )
+        SqliteUserRepository(sqliteDriver)
     }
 
     /** Services */

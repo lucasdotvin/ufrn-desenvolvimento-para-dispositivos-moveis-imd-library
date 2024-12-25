@@ -1,6 +1,6 @@
 package vin.lucas.imdlibrary.values
 
-data class BookStoringPayload(
+data class BookChangePayload(
     val isbn: String,
     val title: String,
     val author: String,

@@ -42,6 +42,12 @@
             android:exported="false"
             android:label="@string/forgot_content_description"
             android:theme="@style/Theme.IMDLibrary"/>
+
+        <activity
+            android:name=".ui.activities.books.CreateBookActivity"
+            android:exported="false"
+            android:label="@string/create_book_content_description"
+            android:theme="@style/Theme.IMDLibrary"/>
     </application>
 
 </manifest>

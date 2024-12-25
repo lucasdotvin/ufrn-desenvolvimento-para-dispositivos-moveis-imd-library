@@ -3,12 +3,12 @@ package vin.lucas.imdlibrary.services
 import vin.lucas.imdlibrary.contracts.repositories.BookRepository
 import vin.lucas.imdlibrary.contracts.services.BookService
 import vin.lucas.imdlibrary.entities.Book
-import vin.lucas.imdlibrary.values.BookStoringPayload
+import vin.lucas.imdlibrary.values.BookChangePayload
 
 class DefaultBookService(
     private val bookRepository: BookRepository,
 ) : BookService {
-    override fun store(payload: BookStoringPayload): Book {
+    override fun store(payload: BookChangePayload): Book {
         require(!bookRepository.existsByIsbn(payload.isbn)) {
             "ISBN já cadastrado"
         }

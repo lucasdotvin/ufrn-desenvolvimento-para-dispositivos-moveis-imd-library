@@ -3,14 +3,14 @@ package vin.lucas.imdlibrary.cases.books
 import android.util.Patterns
 import vin.lucas.imdlibrary.contracts.cases.books.CreateBookUseCase
 import vin.lucas.imdlibrary.contracts.services.BookService
-import vin.lucas.imdlibrary.values.BookStoringPayload
+import vin.lucas.imdlibrary.values.BookChangePayload
 
 class DefaultCreateBookUseCase(
     private val bookService: BookService,
 ) : CreateBookUseCase {
-    override fun execute(payload: BookStoringPayload) {
+    override fun execute(payload: BookChangePayload) {
         require(payload.isbn.isNotBlank()) {
-            "isbn não pode ser vazio"
+            "ISBN não pode ser vazio"
         }
 
         require(payload.title.isNotBlank()) {

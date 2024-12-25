@@ -1,7 +1,7 @@
 package vin.lucas.imdlibrary.contracts.cases.books
 
-import vin.lucas.imdlibrary.values.BookStoringPayload
+import vin.lucas.imdlibrary.values.BookChangePayload
 
 interface CreateBookUseCase {
-    fun execute(payload: BookStoringPayload)
+    fun execute(payload: BookChangePayload)
 }

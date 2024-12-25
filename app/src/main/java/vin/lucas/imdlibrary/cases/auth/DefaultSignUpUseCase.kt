@@ -4,7 +4,6 @@ import vin.lucas.imdlibrary.contracts.cases.auth.SignUpUseCase
 import vin.lucas.imdlibrary.contracts.services.SessionService
 import vin.lucas.imdlibrary.contracts.services.UserService
 import vin.lucas.imdlibrary.contracts.validation.CpfValidator
-import vin.lucas.imdlibrary.entities.User
 
 class DefaultSignUpUseCase(
     private val cpfValidator: CpfValidator,
