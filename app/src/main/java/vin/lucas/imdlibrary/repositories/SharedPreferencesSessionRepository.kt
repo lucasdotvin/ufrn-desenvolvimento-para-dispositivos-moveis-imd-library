@@ -15,6 +15,14 @@ class SharedPreferencesSessionRepository(private val context: Context) : Session
         )
     }
 
+    override fun clear() {
+        with(sharedPreferences.edit()) {
+            remove(context.getString(R.string.auth_shared_preferences_username_key))
+            remove(context.getString(R.string.auth_shared_preferences_until_key))
+            apply()
+        }
+    }
+
     override fun store(user: User, durationInSeconds: Long?) {
         with(sharedPreferences.edit()) {
             putString(

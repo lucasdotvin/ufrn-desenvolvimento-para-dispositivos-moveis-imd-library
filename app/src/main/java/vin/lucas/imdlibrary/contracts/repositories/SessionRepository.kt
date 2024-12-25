@@ -7,4 +7,6 @@ interface SessionRepository {
     fun store(user: User, durationInSeconds: Long?)
 
     fun retrieve(): UserKey?
+
+    fun clear()
 }
