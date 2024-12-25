@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import vin.lucas.imdlibrary.contracts.repositories.UserRepository
 import vin.lucas.imdlibrary.entities.User
+import vin.lucas.imdlibrary.entities.UserKey
 import java.util.Date
 
 class SqliteUserRepository(
@@ -54,6 +55,12 @@ class SqliteUserRepository(
         private const val SQL_UPDATE = """
             UPDATE $TABLE
             SET $USERNAME_COLUMN = ?, $CPF_COLUMN = ?, $PASSWORD_COLUMN = ?, $UPDATED_AT_COLUMN = ?
+            WHERE $ID_COLUMN = ?;
+        """
+
+        private const val SQL_FIND_BY_ID = """
+            SELECT *
+            FROM $TABLE
             WHERE $ID_COLUMN = ?;
         """
     }
@@ -139,5 +146,34 @@ class SqliteUserRepository(
         writableDatabase.close()
 
         user.updatedAt = Date(now)
+    }
+
+    override fun findByKey(key: UserKey): User? {
+        val cursor = readableDatabase.rawQuery(SQL_FIND_BY_ID, arrayOf(key.toString()))
+
+        if (!cursor.moveToFirst()) {
+            cursor.close()
+            readableDatabase.close()
+
+            return null
+        }
+
+        val username = cursor.getString(1)
+        val cpf = cursor.getString(2)
+        val password = cursor.getString(3)
+        val createdAt = cursor.getLong(4)
+        val updatedAt = cursor.getLong(5)
+
+        cursor.close()
+        readableDatabase.close()
+
+        return User(
+            key,
+            username,
+            cpf,
+            password,
+            Date(createdAt),
+            Date(updatedAt),
+        )
     }
 }
