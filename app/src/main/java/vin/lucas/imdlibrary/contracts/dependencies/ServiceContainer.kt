@@ -1,5 +1,8 @@
 package vin.lucas.imdlibrary.contracts.dependencies
 
+import vin.lucas.imdlibrary.contracts.cases.ResetPasswordUseCase
+import vin.lucas.imdlibrary.contracts.cases.SignInUseCase
+import vin.lucas.imdlibrary.contracts.cases.SignUpUseCase
 import vin.lucas.imdlibrary.contracts.repositories.HashRepository
 import vin.lucas.imdlibrary.contracts.repositories.SessionRepository
 import vin.lucas.imdlibrary.contracts.repositories.UserRepository
@@ -16,4 +19,8 @@ interface ServiceContainer {
 
     val sessionService: SessionService
     val userService: UserService
+
+    val signInUseCase: SignInUseCase
+    val signUpUseCase: SignUpUseCase
+    val resetPasswordUseCase: ResetPasswordUseCase
 }

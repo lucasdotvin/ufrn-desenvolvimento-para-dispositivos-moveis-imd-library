@@ -9,12 +9,12 @@ class DefaultUserService(
     private val hashRepository: HashRepository,
     private val userRepository: UserRepository,
 ) : UserService {
-    override fun signUp(username: String, cpf: String, plainPassword: String): User {
+    override fun signUp(username: String, plainCpf: String, plainPassword: String): User {
         require(!userRepository.existsByUsername(username)) {
             "Nome de usuário já existe"
         }
 
-        val hashedCpf = hashRepository.hash(cpf)
+        val hashedCpf = hashRepository.hash(plainCpf)
         val hashedPassword = hashRepository.hash(plainPassword)
 
         return userRepository.store(
