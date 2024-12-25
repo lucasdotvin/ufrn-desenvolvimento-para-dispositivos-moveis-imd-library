@@ -1,8 +1,8 @@
 package vin.lucas.imdlibrary.contracts.dependencies
 
-import vin.lucas.imdlibrary.contracts.cases.ResetPasswordUseCase
-import vin.lucas.imdlibrary.contracts.cases.SignInUseCase
-import vin.lucas.imdlibrary.contracts.cases.SignUpUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.ResetPasswordUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.SignInUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.SignUpUseCase
 import vin.lucas.imdlibrary.contracts.repositories.BookRepository
 import vin.lucas.imdlibrary.contracts.repositories.HashRepository
 import vin.lucas.imdlibrary.contracts.repositories.SessionRepository

@@ -2,12 +2,12 @@ package vin.lucas.imdlibrary.dependencies
 
 import android.content.Context
 import vin.lucas.imdlibrary.R
-import vin.lucas.imdlibrary.cases.DefaultResetPasswordUseCase
-import vin.lucas.imdlibrary.cases.DefaultSignInUseCase
-import vin.lucas.imdlibrary.cases.DefaultSignUpUseCase
-import vin.lucas.imdlibrary.contracts.cases.ResetPasswordUseCase
-import vin.lucas.imdlibrary.contracts.cases.SignInUseCase
-import vin.lucas.imdlibrary.contracts.cases.SignUpUseCase
+import vin.lucas.imdlibrary.cases.auth.DefaultResetPasswordUseCase
+import vin.lucas.imdlibrary.cases.auth.DefaultSignInUseCase
+import vin.lucas.imdlibrary.cases.auth.DefaultSignUpUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.ResetPasswordUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.SignInUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.SignUpUseCase
 import vin.lucas.imdlibrary.contracts.repositories.UserRepository
 import vin.lucas.imdlibrary.contracts.services.UserService
 import vin.lucas.imdlibrary.contracts.dependencies.ServiceContainer

@@ -1,6 +1,6 @@
-package vin.lucas.imdlibrary.cases
+package vin.lucas.imdlibrary.cases.auth
 
-import vin.lucas.imdlibrary.contracts.cases.SignUpUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.SignUpUseCase
 import vin.lucas.imdlibrary.contracts.services.SessionService
 import vin.lucas.imdlibrary.contracts.services.UserService
 import vin.lucas.imdlibrary.contracts.validation.CpfValidator

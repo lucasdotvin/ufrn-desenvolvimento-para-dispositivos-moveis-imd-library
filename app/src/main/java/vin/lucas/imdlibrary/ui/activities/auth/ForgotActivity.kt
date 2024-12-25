@@ -40,7 +40,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import vin.lucas.imdlibrary.IMDLibraryApplication
 import vin.lucas.imdlibrary.R
-import vin.lucas.imdlibrary.contracts.cases.ResetPasswordUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.ResetPasswordUseCase
 import vin.lucas.imdlibrary.ui.activities.GuestActivity
 import vin.lucas.imdlibrary.ui.input.transformation.CpfVisualTransformation
 import vin.lucas.imdlibrary.ui.theme.IMDLibraryTheme

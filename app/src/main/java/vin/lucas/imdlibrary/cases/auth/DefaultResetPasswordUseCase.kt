@@ -1,6 +1,6 @@
-package vin.lucas.imdlibrary.cases
+package vin.lucas.imdlibrary.cases.auth
 
-import vin.lucas.imdlibrary.contracts.cases.ResetPasswordUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.ResetPasswordUseCase
 import vin.lucas.imdlibrary.contracts.services.UserService
 import vin.lucas.imdlibrary.contracts.validation.CpfValidator
 

@@ -43,7 +43,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import vin.lucas.imdlibrary.IMDLibraryApplication
 import vin.lucas.imdlibrary.R
-import vin.lucas.imdlibrary.contracts.cases.SignUpUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.SignUpUseCase
 import vin.lucas.imdlibrary.ui.activities.GuestActivity
 import vin.lucas.imdlibrary.ui.activities.MainActivity
 import vin.lucas.imdlibrary.ui.input.transformation.CpfVisualTransformation

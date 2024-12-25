@@ -1,9 +1,8 @@
-package vin.lucas.imdlibrary.cases
+package vin.lucas.imdlibrary.cases.auth
 
-import vin.lucas.imdlibrary.contracts.cases.SignInUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.SignInUseCase
 import vin.lucas.imdlibrary.contracts.services.SessionService
 import vin.lucas.imdlibrary.contracts.services.UserService
-import vin.lucas.imdlibrary.entities.User
 
 class DefaultSignInUseCase(
     private val sessionService: SessionService,
