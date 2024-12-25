@@ -149,10 +149,10 @@ class SqliteBookRepository(
         )
     }
 
-    override fun update(book: Book) {
+    override fun update(book: Book): Boolean {
         val now = System.currentTimeMillis()
 
-        writableDatabase.update(
+        val updatedCount = writableDatabase.update(
             TABLE,
             contentValuesOf(
                 ISBN_COLUMN to book.isbn,
@@ -170,7 +170,13 @@ class SqliteBookRepository(
 
         writableDatabase.close()
 
+        if (updatedCount == 0) {
+            return false
+        }
+
         book.updatedAt = Date(now)
+
+        return true
     }
 
     override fun delete(book: Book): Boolean {

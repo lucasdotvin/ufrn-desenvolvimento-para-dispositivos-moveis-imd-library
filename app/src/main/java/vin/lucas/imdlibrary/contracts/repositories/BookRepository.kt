@@ -12,7 +12,7 @@ interface BookRepository {
 
     fun store(payload: BookStoringPayload): Book
 
-    fun update(book: Book)
+    fun update(book: Book): Boolean
 
     fun delete(book: Book): Boolean
 }
