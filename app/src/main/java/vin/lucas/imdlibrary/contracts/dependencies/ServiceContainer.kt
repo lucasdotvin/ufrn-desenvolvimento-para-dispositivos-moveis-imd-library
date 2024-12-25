@@ -7,6 +7,7 @@ import vin.lucas.imdlibrary.contracts.repositories.BookRepository
 import vin.lucas.imdlibrary.contracts.repositories.HashRepository
 import vin.lucas.imdlibrary.contracts.repositories.SessionRepository
 import vin.lucas.imdlibrary.contracts.repositories.UserRepository
+import vin.lucas.imdlibrary.contracts.services.BookService
 import vin.lucas.imdlibrary.contracts.services.SessionService
 import vin.lucas.imdlibrary.contracts.services.UserService
 import vin.lucas.imdlibrary.contracts.validation.CpfValidator
@@ -19,6 +20,7 @@ interface ServiceContainer {
     val sessionRepository: SessionRepository
     val userRepository: UserRepository
 
+    val bookService: BookService
     val sessionService: SessionService
     val userService: UserService
 

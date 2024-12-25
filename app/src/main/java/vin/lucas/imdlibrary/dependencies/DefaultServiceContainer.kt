@@ -14,12 +14,14 @@ import vin.lucas.imdlibrary.contracts.dependencies.ServiceContainer
 import vin.lucas.imdlibrary.contracts.repositories.BookRepository
 import vin.lucas.imdlibrary.contracts.repositories.HashRepository
 import vin.lucas.imdlibrary.contracts.repositories.SessionRepository
+import vin.lucas.imdlibrary.contracts.services.BookService
 import vin.lucas.imdlibrary.contracts.services.SessionService
 import vin.lucas.imdlibrary.contracts.validation.CpfValidator
 import vin.lucas.imdlibrary.repositories.BcryptHashRepository
 import vin.lucas.imdlibrary.repositories.SharedPreferencesSessionRepository
 import vin.lucas.imdlibrary.repositories.SqliteBookRepository
 import vin.lucas.imdlibrary.repositories.SqliteUserRepository
+import vin.lucas.imdlibrary.services.DefaultBookService
 import vin.lucas.imdlibrary.services.DefaultSessionService
 import vin.lucas.imdlibrary.services.DefaultUserService
 import vin.lucas.imdlibrary.validation.DefaultCpfValidator
@@ -43,6 +45,12 @@ class DefaultServiceContainer(context: Context) : ServiceContainer {
         SqliteUserRepository(
             context,
             context.getString(R.string.sqlite_database_name),
+        )
+    }
+
+    override val bookService: BookService by lazy {
+        DefaultBookService(
+            bookRepository,
         )
     }
 
