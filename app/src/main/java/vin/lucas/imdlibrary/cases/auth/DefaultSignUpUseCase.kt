@@ -11,7 +11,7 @@ class DefaultSignUpUseCase(
     private val sessionService: SessionService,
     private val userService: UserService,
 ) : SignUpUseCase {
-    override fun execute(username: String, plainCpf: String, plainPassword: String): User {
+    override fun execute(username: String, plainCpf: String, plainPassword: String) {
         require(username.isNotBlank()) {
             "Nome de usuário não pode ser vazio"
         }
@@ -30,7 +30,5 @@ class DefaultSignUpUseCase(
 
         val user = userService.signUp(username, plainCpf, plainPassword)
         sessionService.store(user)
-
-        return user
     }
 }

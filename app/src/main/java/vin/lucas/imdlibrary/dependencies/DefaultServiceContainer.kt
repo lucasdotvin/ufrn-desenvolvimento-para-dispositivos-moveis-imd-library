@@ -5,9 +5,11 @@ import vin.lucas.imdlibrary.R
 import vin.lucas.imdlibrary.cases.auth.DefaultResetPasswordUseCase
 import vin.lucas.imdlibrary.cases.auth.DefaultSignInUseCase
 import vin.lucas.imdlibrary.cases.auth.DefaultSignUpUseCase
+import vin.lucas.imdlibrary.cases.books.DefaultCreateBookUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.ResetPasswordUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignInUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignUpUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.CreateBookUseCase
 import vin.lucas.imdlibrary.contracts.repositories.UserRepository
 import vin.lucas.imdlibrary.contracts.services.UserService
 import vin.lucas.imdlibrary.contracts.dependencies.ServiceContainer
@@ -27,8 +29,10 @@ import vin.lucas.imdlibrary.services.DefaultUserService
 import vin.lucas.imdlibrary.validation.DefaultCpfValidator
 
 class DefaultServiceContainer(context: Context) : ServiceContainer {
+    /** Validation */
     override val cpfValidator: CpfValidator = DefaultCpfValidator()
 
+    /** Repositories */
     override val bookRepository: BookRepository by lazy {
         SqliteBookRepository(
             context,
@@ -48,6 +52,7 @@ class DefaultServiceContainer(context: Context) : ServiceContainer {
         )
     }
 
+    /** Services */
     override val bookService: BookService by lazy {
         DefaultBookService(
             bookRepository,
@@ -69,6 +74,7 @@ class DefaultServiceContainer(context: Context) : ServiceContainer {
         )
     }
 
+    /** Use Cases */
     override val signInUseCase: SignInUseCase by lazy {
         DefaultSignInUseCase(
             sessionService,
@@ -88,6 +94,12 @@ class DefaultServiceContainer(context: Context) : ServiceContainer {
         DefaultResetPasswordUseCase(
             cpfValidator,
             userService,
+        )
+    }
+
+    override val createBookUseCase: CreateBookUseCase by lazy {
+        DefaultCreateBookUseCase(
+            bookService,
         )
     }
 }
