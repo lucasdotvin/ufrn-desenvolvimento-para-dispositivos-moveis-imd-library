@@ -1,6 +1,7 @@
 package vin.lucas.imdlibrary.contracts.repositories
 
 import vin.lucas.imdlibrary.entities.User
+import vin.lucas.imdlibrary.entities.UserKey
 
 interface UserRepository {
     fun existsByUsername(username: String): Boolean
@@ -10,4 +11,6 @@ interface UserRepository {
     fun store(username: String, cpf: String, password: String): User
 
     fun update(user: User)
+
+    fun findByKey(key: UserKey): User?
 }

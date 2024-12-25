@@ -33,6 +33,7 @@ class DefaultServiceContainer(context: Context) : ServiceContainer {
         DefaultUserService(
             cpfValidator,
             hashRepository,
+            sessionRepository,
             userRepository,
         )
     }
