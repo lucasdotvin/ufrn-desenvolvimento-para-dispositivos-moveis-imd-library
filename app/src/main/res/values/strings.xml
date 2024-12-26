@@ -8,7 +8,9 @@
     <string name="add_content_description">Adicionar</string>
     <string name="back_content_description">Voltar</string>
     <string name="create_book_content_description">Cadastrar Livro</string>
+    <string name="empty_content_description">Vazio</string>
     <string name="forgot_content_description">Redefinir Senha</string>
+    <string name="search_content_description">Pesquisar</string>
     <string name="sign_in_content_description">Entrar</string>
     <string name="sign_up_content_description">Criar Conta</string>
 
