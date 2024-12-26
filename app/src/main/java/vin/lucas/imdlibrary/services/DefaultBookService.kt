@@ -37,6 +37,10 @@ class DefaultBookService(
     }
 
     override fun update(book: Book) {
+        require(!bookRepository.existsByIsbn(book.isbn)) {
+            "ISBN já cadastrado"
+        }
+
         val wasUpdated = bookRepository.update(book)
 
         require(wasUpdated) {
