@@ -26,6 +26,11 @@ class SqliteBookRepository(private val driver: SqliteDriver) : BookRepository {
             FROM ${SqliteDriver.Books.TABLE}
             WHERE ${SqliteDriver.Books.ID_COLUMN} = ?;
         """
+
+        private const val SQL_GET_ALL = """
+            SELECT *
+            FROM ${SqliteDriver.Books.TABLE};
+        """
     }
 
     override fun existsByIsbn(isbn: String): Boolean {
@@ -96,6 +101,7 @@ class SqliteBookRepository(private val driver: SqliteDriver) : BookRepository {
                 SqliteDriver.Books.AUTHOR_COLUMN to payload.author,
                 SqliteDriver.Books.PUBLISHER_COLUMN to payload.publisher,
                 SqliteDriver.Books.PUBLICATION_YEAR_COLUMN to payload.publicationYear,
+                SqliteDriver.Books.SUMMARY_COLUMN to payload.summary,
                 SqliteDriver.Books.COVER_URL_COLUMN to payload.coverUrl,
                 SqliteDriver.Books.CREATED_AT_COLUMN to now,
                 SqliteDriver.Books.UPDATED_AT_COLUMN to now,
@@ -111,6 +117,7 @@ class SqliteBookRepository(private val driver: SqliteDriver) : BookRepository {
             payload.author,
             payload.publisher,
             payload.publicationYear,
+            payload.summary,
             payload.coverUrl,
             Date(now),
             Date(now),
@@ -128,6 +135,7 @@ class SqliteBookRepository(private val driver: SqliteDriver) : BookRepository {
                 SqliteDriver.Books.AUTHOR_COLUMN to book.author,
                 SqliteDriver.Books.PUBLISHER_COLUMN to book.publisher,
                 SqliteDriver.Books.PUBLICATION_YEAR_COLUMN to book.publicationYear,
+                SqliteDriver.Books.SUMMARY_COLUMN to book.summary,
                 SqliteDriver.Books.COVER_URL_COLUMN to book.coverUrl,
                 SqliteDriver.Books.CREATED_AT_COLUMN to book.createdAt.time,
                 SqliteDriver.Books.UPDATED_AT_COLUMN to now,
@@ -159,17 +167,36 @@ class SqliteBookRepository(private val driver: SqliteDriver) : BookRepository {
         return deletedCount > 0
     }
 
+    override fun getAll(): List<Book> {
+        val cursor = driver.readableDatabase.rawQuery(
+            SQL_GET_ALL,
+            null,
+        )
+
+        val books = mutableListOf<Book>()
+
+        while (cursor.moveToNext()) {
+            books.add(cursorToBook(cursor))
+        }
+
+        cursor.close()
+        driver.readableDatabase.close()
+
+        return books
+    }
+
     private fun cursorToBook(cursor: Cursor): Book {
         return Book(
-            cursor.getLong(0),
-            cursor.getString(1),
-            cursor.getString(2),
-            cursor.getString(3),
-            cursor.getString(4),
-            cursor.getInt(5),
-            cursor.getString(6),
-            Date(cursor.getLong(7)),
-            Date(cursor.getLong(8)),
+            id = cursor.getLong(0),
+            isbn = cursor.getString(1),
+            title = cursor.getString(2),
+            author = cursor.getString(3),
+            publisher = cursor.getString(4),
+            publicationYear = cursor.getInt(5),
+            summary = cursor.getString(6),
+            coverUrl = cursor.getString(7),
+            createdAt = Date(cursor.getLong(8)),
+            updatedAt = Date(cursor.getLong(9)),
         )
     }
 }

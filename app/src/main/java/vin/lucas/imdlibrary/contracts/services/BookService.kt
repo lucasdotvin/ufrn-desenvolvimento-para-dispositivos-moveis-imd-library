@@ -13,4 +13,6 @@ interface BookService {
     fun update(book: Book)
 
     fun delete(book: Book)
+
+    fun getAll(): List<Book>
 }

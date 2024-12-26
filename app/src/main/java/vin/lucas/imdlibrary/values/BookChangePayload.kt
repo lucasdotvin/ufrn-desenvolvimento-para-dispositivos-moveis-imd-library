@@ -6,5 +6,6 @@ data class BookChangePayload(
     val author: String,
     val publisher: String,
     val publicationYear: Int,
+    val summary: String,
     val coverUrl: String,
 )

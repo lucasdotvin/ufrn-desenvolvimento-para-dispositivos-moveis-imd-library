@@ -51,4 +51,8 @@ class DefaultBookService(
             "Livro não encontrado"
         }
     }
+
+    override fun getAll(): List<Book> {
+        return bookRepository.getAll()
+    }
 }

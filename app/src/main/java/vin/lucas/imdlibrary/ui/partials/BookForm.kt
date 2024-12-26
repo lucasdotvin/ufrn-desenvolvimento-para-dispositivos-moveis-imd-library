@@ -1,9 +1,8 @@
 package vin.lucas.imdlibrary.ui.partials
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -39,11 +38,16 @@ fun BookForm(
     var author by remember { mutableStateOf(book?.author ?:"") }
     var publisher by remember { mutableStateOf(book?.publisher ?:"") }
     var publicationYear by remember { mutableIntStateOf(book?.publicationYear ?: currentYear) }
+    var summary by remember { mutableStateOf(book?.summary ?:"") }
     var coverUrl by remember { mutableStateOf(book?.coverUrl ?:"") }
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
         Column(
             modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -54,28 +58,24 @@ fun BookForm(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 label = { Text("ISBN") },
             )
-            Spacer(modifier = Modifier.padding(4.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = title,
                 onValueChange = { title = it },
                 label = { Text("Título") },
             )
-            Spacer(modifier = Modifier.padding(4.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = author,
                 onValueChange = { author = it },
                 label = { Text("Autor") },
             )
-            Spacer(modifier = Modifier.padding(4.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = publisher,
                 onValueChange = { publisher = it },
                 label = { Text("Editora") },
             )
-            Spacer(modifier = Modifier.padding(4.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = publicationYear.toString(),
@@ -87,7 +87,12 @@ fun BookForm(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 label = { Text("Ano de Publicação") },
             )
-            Spacer(modifier = Modifier.padding(4.dp))
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = summary,
+                onValueChange = { summary = it },
+                label = { Text("Resumo") },
+            )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = coverUrl,
@@ -95,7 +100,6 @@ fun BookForm(
                 label = { Text("URL da Capa") },
             )
         }
-        Spacer(modifier = Modifier.padding(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = { onSubmit(BookChangePayload(
@@ -104,6 +108,7 @@ fun BookForm(
                 author = author,
                 publisher = publisher,
                 publicationYear = publicationYear,
+                summary = summary,
                 coverUrl = coverUrl,
             )) },
         ) {

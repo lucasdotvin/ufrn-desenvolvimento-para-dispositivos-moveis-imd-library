@@ -6,10 +6,20 @@ import vin.lucas.imdlibrary.cases.auth.DefaultResetPasswordUseCase
 import vin.lucas.imdlibrary.cases.auth.DefaultSignInUseCase
 import vin.lucas.imdlibrary.cases.auth.DefaultSignUpUseCase
 import vin.lucas.imdlibrary.cases.books.DefaultCreateBookUseCase
+import vin.lucas.imdlibrary.cases.books.DefaultDeleteBookUseCase
+import vin.lucas.imdlibrary.cases.books.DefaultFindBookByIsbnUseCase
+import vin.lucas.imdlibrary.cases.books.DefaultFindBookUseCase
+import vin.lucas.imdlibrary.cases.books.DefaultGetAllBooksUseCase
+import vin.lucas.imdlibrary.cases.books.DefaultUpdateBookUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.ResetPasswordUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignInUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignUpUseCase
 import vin.lucas.imdlibrary.contracts.cases.books.CreateBookUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.DeleteBookUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.FindBookByIsbnUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.FindBookUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.GetAllBooksUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.UpdateBookUseCase
 import vin.lucas.imdlibrary.contracts.dependencies.ServiceContainer
 import vin.lucas.imdlibrary.contracts.repositories.BookRepository
 import vin.lucas.imdlibrary.contracts.repositories.HashRepository
@@ -101,6 +111,36 @@ class DefaultServiceContainer(context: Context) : ServiceContainer {
 
     override val createBookUseCase: CreateBookUseCase by lazy {
         DefaultCreateBookUseCase(
+            bookService,
+        )
+    }
+
+    override val getAllBooksUseCase: GetAllBooksUseCase by lazy {
+        DefaultGetAllBooksUseCase(
+            bookService,
+        )
+    }
+
+    override val findBookUseCase: FindBookUseCase by lazy {
+        DefaultFindBookUseCase(
+            bookService,
+        )
+    }
+
+    override val deleteBookUseCase: DeleteBookUseCase by lazy {
+        DefaultDeleteBookUseCase(
+            bookService,
+        )
+    }
+
+    override val updateBookUseCase: UpdateBookUseCase by lazy {
+        DefaultUpdateBookUseCase(
+            bookService,
+        )
+    }
+
+    override val findBookByIsbnUseCase: FindBookByIsbnUseCase by lazy {
+        DefaultFindBookByIsbnUseCase(
             bookService,
         )
     }

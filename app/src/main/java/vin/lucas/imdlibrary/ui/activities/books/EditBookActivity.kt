@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,20 +24,40 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import vin.lucas.imdlibrary.IMDLibraryApplication
 import vin.lucas.imdlibrary.R
-import vin.lucas.imdlibrary.contracts.cases.books.CreateBookUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.FindBookUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.UpdateBookUseCase
+import vin.lucas.imdlibrary.entities.Book
 import vin.lucas.imdlibrary.ui.activities.AuthenticatedActivity
 import vin.lucas.imdlibrary.ui.partials.BookForm
 import vin.lucas.imdlibrary.ui.theme.IMDLibraryTheme
 import vin.lucas.imdlibrary.values.BookChangePayload
 
-class CreateBookActivity : AuthenticatedActivity() {
-    private val createBookUseCase: CreateBookUseCase by lazy {
-        (application as IMDLibraryApplication).serviceContainer.createBookUseCase
+class EditBookActivity : AuthenticatedActivity() {
+    private val findBookUseCase: FindBookUseCase by lazy {
+        (application as IMDLibraryApplication).serviceContainer.findBookUseCase
     }
+
+    private val updateBookUseCase: UpdateBookUseCase by lazy {
+        (application as IMDLibraryApplication).serviceContainer.updateBookUseCase
+    }
+
+    private val bookId: Long by lazy {
+        intent.getLongExtra("bookId", -1)
+    }
+
+    private lateinit var book: Book
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        try {
+            book = findBookUseCase.execute(bookId)
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         setContent {
             IMDLibraryTheme {
@@ -57,7 +77,7 @@ class CreateBookActivity : AuthenticatedActivity() {
                                 }
                             },
                             title = {
-                                Text("Cadastrar Livro")
+                                Text("Editar " + book.title)
                             },
                         )
                     },
@@ -67,26 +87,27 @@ class CreateBookActivity : AuthenticatedActivity() {
                         )
                         {
                             BookForm(
-                                null,
+                                book,
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(24.dp),
                                 onSubmit = { payload ->
-                                    tryCreateBook(
+                                    tryUpdateBook(
                                         this,
+                                        book,
                                         payload,
-                                        createBookUseCase,
+                                        updateBookUseCase,
                                     )
                                 },
                                 submitButton = {
                                     Icon(
-                                        imageVector = Icons.Filled.Add,
-                                        contentDescription = stringResource(id = R.string.add_content_description),
+                                        imageVector = Icons.Filled.Edit,
+                                        contentDescription = stringResource(id = R.string.edit_content_description),
                                         modifier = Modifier
                                             .padding(end = 4.dp)
                                             .size(20.dp),
                                     )
-                                    Text(text = "Cadastrar")
+                                    Text(text = "Salvar")
                                 }
                             )
                         }
@@ -97,18 +118,20 @@ class CreateBookActivity : AuthenticatedActivity() {
     }
 }
 
-private fun tryCreateBook(
+private fun tryUpdateBook(
     context: Activity,
+    book: Book,
     payload: BookChangePayload,
-    createBookUseCase: CreateBookUseCase,
+    updateBookUseCase: UpdateBookUseCase,
 ) {
     try {
-        createBookUseCase.execute(payload)
+        updateBookUseCase.execute(book, payload)
     } catch (e: IllegalArgumentException) {
         Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
         return
     }
 
-    Toast.makeText(context, "Livro cadastrado com sucesso!", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, "Livro atualizado com sucesso!", Toast.LENGTH_SHORT).show()
     context.finish()
 }
+

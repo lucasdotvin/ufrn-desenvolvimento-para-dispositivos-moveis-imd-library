@@ -21,6 +21,7 @@ class SqliteDriver(
         const val AUTHOR_COLUMN = "author"
         const val PUBLISHER_COLUMN = "publisher"
         const val PUBLICATION_YEAR_COLUMN = "publication_year"
+        const val SUMMARY_COLUMN = "summary"
         const val COVER_URL_COLUMN = "cover_url"
         const val CREATED_AT_COLUMN = "created_at"
         const val UPDATED_AT_COLUMN = "updated_at"
@@ -33,6 +34,7 @@ class SqliteDriver(
                 $AUTHOR_COLUMN TEXT NOT NULL,
                 $PUBLISHER_COLUMN TEXT NOT NULL,
                 $PUBLICATION_YEAR_COLUMN INTEGER NOT NULL,
+                $SUMMARY_COLUMN TEXT NOT NULL,
                 $COVER_URL_COLUMN TEXT NOT NULL,
                 $CREATED_AT_COLUMN TIMESTAMP NOT NULL,
                 $UPDATED_AT_COLUMN TIMESTAMP NOT NULL

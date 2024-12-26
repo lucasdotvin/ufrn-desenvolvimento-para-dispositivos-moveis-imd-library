@@ -4,6 +4,11 @@ import vin.lucas.imdlibrary.contracts.cases.auth.ResetPasswordUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignInUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignUpUseCase
 import vin.lucas.imdlibrary.contracts.cases.books.CreateBookUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.DeleteBookUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.FindBookByIsbnUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.FindBookUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.GetAllBooksUseCase
+import vin.lucas.imdlibrary.contracts.cases.books.UpdateBookUseCase
 import vin.lucas.imdlibrary.contracts.repositories.BookRepository
 import vin.lucas.imdlibrary.contracts.repositories.HashRepository
 import vin.lucas.imdlibrary.contracts.repositories.SessionRepository
@@ -34,4 +39,9 @@ interface ServiceContainer {
     val resetPasswordUseCase: ResetPasswordUseCase
 
     val createBookUseCase: CreateBookUseCase
+    val getAllBooksUseCase: GetAllBooksUseCase
+    val findBookUseCase: FindBookUseCase
+    val deleteBookUseCase: DeleteBookUseCase
+    val updateBookUseCase: UpdateBookUseCase
+    val findBookByIsbnUseCase: FindBookByIsbnUseCase
 }

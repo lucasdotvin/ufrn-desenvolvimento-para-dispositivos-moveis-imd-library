@@ -15,4 +15,6 @@ interface BookRepository {
     fun update(book: Book): Boolean
 
     fun delete(book: Book): Boolean
+
+    fun getAll(): List<Book>
 }

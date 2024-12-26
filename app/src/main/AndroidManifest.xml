@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:name=".IMDLibraryApplication"
@@ -47,6 +50,24 @@
             android:name=".ui.activities.books.CreateBookActivity"
             android:exported="false"
             android:label="@string/create_book_content_description"
+            android:theme="@style/Theme.IMDLibrary"/>
+
+        <activity
+            android:name=".ui.activities.books.ShowBookActivity"
+            android:exported="false"
+            android:label="@string/show_book_content_description"
+            android:theme="@style/Theme.IMDLibrary"/>
+
+        <activity
+            android:name=".ui.activities.books.EditBookActivity"
+            android:exported="false"
+            android:label="@string/edit_book_content_description"
+            android:theme="@style/Theme.IMDLibrary"/>
+
+        <activity
+            android:name=".ui.activities.books.FindBookByIsbnActivity"
+            android:exported="false"
+            android:label="@string/find_book_by_isbn_content_description"
             android:theme="@style/Theme.IMDLibrary"/>
     </application>
 
