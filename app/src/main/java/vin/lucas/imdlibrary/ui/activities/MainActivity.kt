@@ -40,6 +40,7 @@ import vin.lucas.imdlibrary.R
 import vin.lucas.imdlibrary.contracts.cases.books.GetAllBooksUseCase
 import vin.lucas.imdlibrary.entities.Book
 import vin.lucas.imdlibrary.ui.activities.books.CreateBookActivity
+import vin.lucas.imdlibrary.ui.activities.books.FindBookByIsbnActivity
 import vin.lucas.imdlibrary.ui.activities.books.ShowBookActivity
 import vin.lucas.imdlibrary.ui.partials.BookList
 import vin.lucas.imdlibrary.ui.theme.IMDLibraryTheme
@@ -115,7 +116,7 @@ private fun FloatingActionButtons(context: Context)
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             SmallFloatingActionButton(onClick = {
-                context.startActivity(Intent(context, CreateBookActivity::class.java))
+                context.startActivity(Intent(context, FindBookByIsbnActivity::class.java))
             }) {
                 Icon(
                     Icons.Filled.Search,
