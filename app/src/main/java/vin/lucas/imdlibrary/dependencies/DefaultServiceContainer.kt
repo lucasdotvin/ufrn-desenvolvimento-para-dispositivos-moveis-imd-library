@@ -4,6 +4,7 @@ import android.content.Context
 import vin.lucas.imdlibrary.R
 import vin.lucas.imdlibrary.cases.auth.DefaultResetPasswordUseCase
 import vin.lucas.imdlibrary.cases.auth.DefaultSignInUseCase
+import vin.lucas.imdlibrary.cases.auth.DefaultSignOutUseCase
 import vin.lucas.imdlibrary.cases.auth.DefaultSignUpUseCase
 import vin.lucas.imdlibrary.cases.books.DefaultCreateBookUseCase
 import vin.lucas.imdlibrary.cases.books.DefaultDeleteBookUseCase
@@ -13,6 +14,7 @@ import vin.lucas.imdlibrary.cases.books.DefaultGetAllBooksUseCase
 import vin.lucas.imdlibrary.cases.books.DefaultUpdateBookUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.ResetPasswordUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignInUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.SignOutUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignUpUseCase
 import vin.lucas.imdlibrary.contracts.cases.books.CreateBookUseCase
 import vin.lucas.imdlibrary.contracts.cases.books.DeleteBookUseCase
@@ -106,6 +108,12 @@ class DefaultServiceContainer(context: Context) : ServiceContainer {
         DefaultResetPasswordUseCase(
             cpfValidator,
             userService,
+        )
+    }
+
+    override val signOutUseCase: SignOutUseCase by lazy {
+        DefaultSignOutUseCase(
+            sessionService,
         )
     }
 

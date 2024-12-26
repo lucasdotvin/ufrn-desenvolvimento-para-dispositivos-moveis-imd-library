@@ -19,6 +19,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
@@ -37,8 +38,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import vin.lucas.imdlibrary.IMDLibraryApplication
 import vin.lucas.imdlibrary.R
+import vin.lucas.imdlibrary.contracts.cases.auth.SignOutUseCase
 import vin.lucas.imdlibrary.contracts.cases.books.GetAllBooksUseCase
 import vin.lucas.imdlibrary.entities.Book
+import vin.lucas.imdlibrary.ui.activities.auth.SignInActivity
 import vin.lucas.imdlibrary.ui.activities.books.CreateBookActivity
 import vin.lucas.imdlibrary.ui.activities.books.FindBookByIsbnActivity
 import vin.lucas.imdlibrary.ui.activities.books.ShowBookActivity
@@ -48,6 +51,10 @@ import vin.lucas.imdlibrary.ui.theme.IMDLibraryTheme
 class MainActivity : AuthenticatedActivity() {
     private val getAllBooksUseCase: GetAllBooksUseCase by lazy {
         (application as IMDLibraryApplication).serviceContainer.getAllBooksUseCase
+    }
+
+    private val signOutUseCase: SignOutUseCase by lazy {
+        (application as IMDLibraryApplication).serviceContainer.signOutUseCase
     }
 
     private val books = mutableStateListOf<Book>()
@@ -74,6 +81,18 @@ class MainActivity : AuthenticatedActivity() {
                                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                             ),
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    signOutUseCase.execute()
+                                    startActivity(Intent(this, SignInActivity::class.java))
+                                    finish()
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Clear,
+                                        contentDescription = stringResource(R.string.sign_out_content_description),
+                                    )
+                                }
+                            },
                             title = {
                                 Text("IMDLibrary")
                             },

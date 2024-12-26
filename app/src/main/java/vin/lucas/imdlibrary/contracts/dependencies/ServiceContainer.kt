@@ -2,6 +2,7 @@ package vin.lucas.imdlibrary.contracts.dependencies
 
 import vin.lucas.imdlibrary.contracts.cases.auth.ResetPasswordUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignInUseCase
+import vin.lucas.imdlibrary.contracts.cases.auth.SignOutUseCase
 import vin.lucas.imdlibrary.contracts.cases.auth.SignUpUseCase
 import vin.lucas.imdlibrary.contracts.cases.books.CreateBookUseCase
 import vin.lucas.imdlibrary.contracts.cases.books.DeleteBookUseCase
@@ -37,6 +38,7 @@ interface ServiceContainer {
     val signInUseCase: SignInUseCase
     val signUpUseCase: SignUpUseCase
     val resetPasswordUseCase: ResetPasswordUseCase
+    val signOutUseCase: SignOutUseCase
 
     val createBookUseCase: CreateBookUseCase
     val getAllBooksUseCase: GetAllBooksUseCase
