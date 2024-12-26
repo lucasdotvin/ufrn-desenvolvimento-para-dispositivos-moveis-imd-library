@@ -9,7 +9,7 @@ class DefaultBookService(
     private val bookRepository: BookRepository,
 ) : BookService {
     override fun store(payload: BookChangePayload): Book {
-        require(!bookRepository.existsByIsbn(payload.isbn)) {
+        require(bookRepository.retrieveIdByIsbn(payload.isbn) == null) {
             "ISBN já cadastrado"
         }
 
@@ -37,8 +37,10 @@ class DefaultBookService(
     }
 
     override fun update(book: Book) {
-        require(!bookRepository.existsByIsbn(book.isbn)) {
-            "ISBN já cadastrado"
+        val idAssociatedWithIsbn = bookRepository.retrieveIdByIsbn(book.isbn)
+
+        require(idAssociatedWithIsbn == book.id || idAssociatedWithIsbn == null) {
+            "ISBN já associado a outro livro"
         }
 
         val wasUpdated = bookRepository.update(book)

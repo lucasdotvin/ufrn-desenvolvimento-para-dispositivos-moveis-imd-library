@@ -4,7 +4,7 @@ import vin.lucas.imdlibrary.entities.Book
 import vin.lucas.imdlibrary.values.BookChangePayload
 
 interface BookRepository {
-    fun existsByIsbn(isbn: String): Boolean
+    fun retrieveIdByIsbn(isbn: String): Long?
 
     fun findByIsbn(isbn: String): Book?
 

@@ -10,7 +10,7 @@ import java.util.Date
 class SqliteBookRepository(private val driver: SqliteDriver) : BookRepository {
     private companion object Queries {
         private const val EXISTS_BY_ISBN = """
-            SELECT COUNT(*)
+            SELECT ${SqliteDriver.Books.ID_COLUMN}
             FROM ${SqliteDriver.Books.TABLE}
             WHERE ${SqliteDriver.Books.ISBN_COLUMN} = ?;
         """
@@ -33,18 +33,22 @@ class SqliteBookRepository(private val driver: SqliteDriver) : BookRepository {
         """
     }
 
-    override fun existsByIsbn(isbn: String): Boolean {
+    override fun retrieveIdByIsbn(isbn: String): Long? {
         val cursor = driver.readableDatabase.rawQuery(
             EXISTS_BY_ISBN,
             arrayOf(isbn),
         )
 
-        val count = cursor.moveToFirst().let { cursor.getInt(0) }
+        val id = if (cursor.moveToFirst()) {
+            cursor.getLong(0)
+        } else {
+            null
+        }
 
         cursor.close()
         driver.readableDatabase.close()
 
-        return count > 0
+        return id
     }
 
     override fun findByIsbn(isbn: String): Book? {
